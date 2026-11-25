@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>m3svelte.js</title>
+<meta name="description" content="m3svelte.js is a single prebuilt JavaScript file that bundles m3-svelte so you can use Material 3 components in plain HTML without installing anything.">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<style>
+  /* ───────── Theme (Material 3 baseline). Same tokens the bundle expects. ───────── */
+  @layer tokens {
+    :root {
+      color-scheme: light;
+      --m3c-primary: #6750A4; --m3c-on-primary: #FFFFFF;
+      --m3c-primary-container: #EADDFF; --m3c-on-primary-container: #21005D;
+      --m3c-secondary: #625B71; --m3c-on-secondary: #FFFFFF;
+      --m3c-secondary-container: #E8DEF8; --m3c-on-secondary-container: #1D192B;
+      --m3c-tertiary: #7D5260; --m3c-on-tertiary: #FFFFFF;
+      --m3c-tertiary-container: #FFD8E4; --m3c-on-tertiary-container: #31111D;
+      --m3c-error: #B3261E; --m3c-on-error: #FFFFFF;
+      --m3c-error-container: #F9DEDC; --m3c-on-error-container: #410E0B;
+      --m3c-surface: #FEF7FF; --m3c-on-surface: #1D1B20;
+      --m3c-surface-variant: #E7E0EC; --m3c-on-surface-variant: #49454F;
+      --m3c-surface-dim: #DED8E1; --m3c-surface-bright: #FEF7FF;
+      --m3c-surface-container-lowest: #FFFFFF; --m3c-surface-container-low: #F7F2FA;
+      --m3c-surface-container: #F3EDF7; --m3c-surface-container-high: #ECE6F0;
+      --m3c-surface-container-highest: #E6E0E9;
+      --m3c-outline: #79747E; --m3c-outline-variant: #CAC4D0;
+      --m3c-inverse-surface: #322F35; --m3c-inverse-on-surface: #F5EFF7; --m3c-inverse-primary: #D0BCFF;
+      --m3c-shadow: #000000; --m3c-scrim: #000000; --m3c-surface-tint: #6750A4;
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --m3c-primary: #D0BCFF; --m3c-on-primary: #381E72;
+      --m3c-primary-container: #4F378B; --m3c-on-primary-container: #EADDFF;
+      --m3c-secondary: #CCC2DC; --m3c-on-secondary: #332D41;
+      --m3c-secondary-container: #4A4458; --m3c-on-secondary-container: #E8DEF8;
+      --m3c-tertiary: #EFB8C8; --m3c-on-tertiary: #492532;
+      --m3c-tertiary-container: #633B48; --m3c-on-tertiary-container: #FFD8E4;
+      --m3c-error: #F2B8B5; --m3c-on-error: #601410;
+      --m3c-error-container: #8C1D18; --m3c-on-error-container: #F9DEDC;
+      --m3c-surface: #141218; --m3c-on-surface: #E6E0E9;
+      --m3c-surface-variant: #49454F; --m3c-on-surface-variant: #CAC4D0;
+      --m3c-surface-dim: #141218; --m3c-surface-bright: #3B383E;
+      --m3c-surface-container-lowest: #0F0D13; --m3c-surface-container-low: #1D1B20;
+      --m3c-surface-container: #211F26; --m3c-surface-container-high: #2B2930;
+      --m3c-surface-container-highest: #36343B;
+      --m3c-outline: #938F99; --m3c-outline-variant: #49454F;
+      --m3c-inverse-surface: #E6E0E9; --m3c-inverse-on-surface: #322F35; --m3c-inverse-primary: #6750A4;
+      --m3c-surface-tint: #D0BCFF;
+    }
+    /* Global tokens from m3-svelte/etc/styles.css (needed by every component) */
+    :root {
+      --density: 0;
+      --m3-font: "Google Sans Flex", Roboto, system-ui, sans-serif;
+      --m3-font-mono: "Google Sans Code", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --m3-elevation-0: none;
+      --m3-elevation-1: 0 1px 2px 0 oklch(from var(--m3c-shadow) l c h / .3), 0 1px 3px 1px oklch(from var(--m3c-shadow) l c h / .15);
+      --m3-elevation-2: 0 1px 2px 0 oklch(from var(--m3c-shadow) l c h / .3), 0 2px 6px 2px oklch(from var(--m3c-shadow) l c h / .15);
+      --m3-elevation-3: 0 1px 3px 0 oklch(from var(--m3c-shadow) l c h / .3), 0 4px 8px 3px oklch(from var(--m3c-shadow) l c h / .15);
+      --m3-elevation-4: 0 2px 3px 0 oklch(from var(--m3c-shadow) l c h / .3), 0 6px 10px 4px oklch(from var(--m3c-shadow) l c h / .15);
+      --m3-elevation-5: 0 4px 4px 0 oklch(from var(--m3c-shadow) l c h / .3), 0 8px 12px 6px oklch(from var(--m3c-shadow) l c h / .15);
+      --m3-shape-none: 0; --m3-shape-extra-small: 4px; --m3-shape-small: 8px; --m3-shape-medium: 12px;
+      --m3-shape-large: 16px; --m3-shape-large-increased: 20px; --m3-shape-extra-large: 28px;
+      --m3-shape-full: calc(infinity * 1px);
+      --m3-timing-function-fast-spatial: cubic-bezier(.42,1.67,.21,.9); --m3-duration-fast-spatial: 383ms;
+      --m3-easing-fast-spatial: var(--m3-timing-function-fast-spatial) var(--m3-duration-fast-spatial);
+      --m3-timing-function-spatial: cubic-bezier(.38,1.21,.22,1); --m3-duration-spatial: 450ms;
+      --m3-easing-spatial: var(--m3-timing-function-spatial) var(--m3-duration-spatial);
+      --m3-timing-function-fast: cubic-bezier(.31,.94,.34,1); --m3-duration-fast: 150ms;
+      --m3-easing-fast: var(--m3-timing-function-fast) var(--m3-duration-fast);
+      --m3-timing-function: cubic-bezier(.31,.94,.34,1); --m3-duration: 233ms;
+      --m3-easing: var(--m3-timing-function) var(--m3-duration);
+      --m3-timing-function-slow: cubic-bezier(.31,.94,.34,1); --m3-duration-slow: 333ms;
+      --m3-easing-slow: var(--m3-timing-function-slow) var(--m3-duration-slow);
+      --m3-timing-function-emphasized: cubic-bezier(.2,0,0,1);
+      --m3-timing-function-emphasized-accel: cubic-bezier(.3,0,.8,.15);
+      --m3-timing-function-emphasized-decel: cubic-bezier(.05,.7,.1,1);
+      --m3v-background: var(--m3c-surface);
+    }
+  }
+  @keyframes focus-outward { 0% { box-shadow: 0 0 0 0 var(--m3c-secondary) } 100% { box-shadow: 0 0 0 3px var(--m3c-secondary) } }
+  @keyframes focus-inward  { 0% { box-shadow: inset 0 0 0 0 var(--m3c-secondary) } 100% { box-shadow: inset 0 0 0 3px var(--m3c-secondary) } }
+  :focus-visible { outline: none; animation: focus-outward .6s cubic-bezier(.14,5.63,.4,.5) forwards; }
+
+  /* ───────── Page ───────── */
+  html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+  body {
+    margin: 0; font-family: var(--m3-font); font-size: 1rem; line-height: 1.6;
+    background: var(--m3c-surface); color: var(--m3c-on-surface);
+    transition: background-color var(--m3-easing), color var(--m3-easing);
+  }
+  .wrap { max-width: 44rem; margin: 0 auto; padding: 0 1.25rem; }
+  header.top {
+    position: sticky; top: 0; z-index: 10; backdrop-filter: blur(12px);
+    background: oklch(from var(--m3c-surface) l c h / .82);
+    border-bottom: 1px solid var(--m3c-outline-variant);
+  }
+  header.top .wrap { display: flex; align-items: center; gap: 1.25rem; height: 3.5rem; }
+  header.top nav { display: flex; gap: 1rem; margin-left: auto; font-size: .875rem; }
+  header.top a { color: var(--m3c-on-surface-variant); text-decoration: none; }
+  header.top a:hover { color: var(--m3c-on-surface); }
+  .brand { font-weight: 600; letter-spacing: -.01em; color: var(--m3c-on-surface) !important; }
+  h1 { font-size: clamp(2rem, 6vw, 2.75rem); line-height: 1.15; font-weight: 500; letter-spacing: -.02em; margin: 0 0 .75rem; }
+  h2 { font-size: 1.5rem; font-weight: 500; letter-spacing: -.01em; margin: 0 0 1rem; padding-top: 3.5rem; }
+  h3 { font-size: 1rem; font-weight: 600; margin: 2rem 0 .5rem; }
+  p  { margin: 0 0 1rem; color: var(--m3c-on-surface-variant); }
+  p strong, li strong { color: var(--m3c-on-surface); font-weight: 600; }
+  a.inline { color: var(--m3c-primary); text-decoration: underline; text-underline-offset: 3px; }
+  code { font-family: var(--m3-font-mono); font-size: .85em; background: var(--m3c-surface-container-high); padding: .1em .35em; border-radius: var(--m3-shape-extra-small); }
+  pre {
+    position: relative; margin: 0 0 1rem; padding: 1rem 1.1rem; overflow: auto; font-size: .8125rem; line-height: 1.6;
+    background: var(--m3c-surface-container); border-radius: var(--m3-shape-medium); color: var(--m3c-on-surface);
+  }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  pre .copy {
+    position: absolute; top: .5rem; right: .5rem; font: inherit; font-size: .6875rem; font-weight: 600; cursor: pointer;
+    background: var(--m3c-surface-container-highest); color: var(--m3c-on-surface-variant); border: 0;
+    padding: .25rem .55rem; border-radius: var(--m3-shape-full); opacity: 0; transition: opacity var(--m3-easing-fast);
+  }
+  pre:hover .copy, pre .copy:focus-visible { opacity: 1; }
+  .c { color: var(--m3c-outline); }            /* comment */
+  .k { color: var(--m3c-primary); }            /* keyword */
+  .s { color: var(--m3c-tertiary); }           /* string */
+  .step { display: grid; grid-template-columns: 2rem 1fr; gap: .75rem; margin-top: 1.75rem; }
+  .step .n {
+    width: 1.75rem; height: 1.75rem; border-radius: var(--m3-shape-full); display: grid; place-items: center;
+    background: var(--m3c-primary-container); color: var(--m3c-on-primary-container); font-size: .8125rem; font-weight: 600; margin-top: .1rem;
+  }
+  .step h3 { margin-top: .2rem; }
+  table { width: 100%; border-collapse: collapse; font-size: .875rem; margin: 0 0 1.25rem; }
+  th, td { text-align: left; vertical-align: top; padding: .55rem .5rem .55rem 0; border-bottom: 1px solid var(--m3c-outline-variant); }
+  th { font-weight: 600; color: var(--m3c-on-surface-variant); font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+  td:first-child { white-space: nowrap; font-family: var(--m3-font-mono); font-size: .8125rem; }
+  td:last-child { color: var(--m3c-on-surface-variant); }
+  ul { padding-left: 1.2rem; color: var(--m3c-on-surface-variant); margin: 0 0 1rem; }
+  li { margin: .3rem 0; }
+  .demo {
+    display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; padding: 1.5rem;
+    border: 1px solid var(--m3c-outline-variant); border-radius: var(--m3-shape-large); margin: 1.5rem 0 .5rem; min-height: 4.5rem;
+    background: var(--m3c-surface-container-low);
+  }
+  .demo label { display: inline-flex; align-items: center; gap: .6rem; cursor: pointer; font-size: .875rem; }
+  .demo .bar { flex: 1 1 100%; }
+  .demo .status { font-size: .8125rem; color: var(--m3c-on-surface-variant); }
+  .demo .status.err { color: var(--m3c-error); }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr)); gap: .5rem; margin: 0 0 1.25rem; }
+  .sw { height: 3rem; border-radius: var(--m3-shape-small); font-size: .6875rem; padding: .35rem .5rem; font-family: var(--m3-font-mono); display: flex; align-items: flex-end; }
+  footer { margin: 5rem 0 3rem; font-size: .8125rem; color: var(--m3c-on-surface-variant); border-top: 1px solid var(--m3c-outline-variant); padding-top: 1.5rem; }
+  .pill { display: inline-block; font-size: .6875rem; font-weight: 600; padding: .15rem .55rem; border-radius: var(--m3-shape-full); background: var(--m3c-secondary-container); color: var(--m3c-on-secondary-container); vertical-align: middle; margin-left: .35rem; }
+  .ml { margin-left: auto; }
+  #theme-switch { display: inline-flex; align-items: center; min-width: 3.25rem; min-height: 2rem; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top">m3svelte.js</a>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#usage">How to use</a>
+      <a href="#docs">Docs</a>
+      <a href="https://github.com/mightyhammerheadtree/m3svelte.js" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+    <label id="theme-switch" title="Toggle dark mode"></label>
+  </div>
+</header>
+
+<main class="wrap" id="top">
+
+  <!-- ───────── Hero ───────── -->
+  <section style="padding-top:4.5rem">
+    <h1>Material 3 components.<br>One file. No build step.</h1>
+    <p><strong>m3svelte.js</strong> is a single prebuilt JavaScript module that bundles
+      <a class="inline" href="https://github.com/KTibow/m3-svelte" target="_blank" rel="noopener">m3-svelte</a> together with the Svelte 5 runtime.
+      Import it from a URL in plain HTML and you get every component — buttons, text fields, dialogs, tabs, snackbars — without npm, Vite, or Svelte compilation.</p>
+
+    <pre><button class="copy" data-copy>Copy</button><code><span class="k">import</span> { mount, Button } <span class="k">from</span> <span class="s">"https://cdn.jsdelivr.net/gh/mightyhammerheadtree/m3svelte.js@main/m3svelte.js"</span>;</code></pre>
+
+    <div class="demo" id="demo">
+      <span class="status" id="demo-status">Loading components from the CDN…</span>
+    </div>
+    <p style="font-size:.8125rem">↑ These are real components mounted from the bundle at runtime. The switch in the header is one too — it drives this page's dark mode.</p>
+  </section>
+
+  <!-- ───────── Overview ───────── -->
+  <section id="overview">
+    <h2>Overview</h2>
+    <p><strong>What it is.</strong> A 1.2 MB ES module built from <code>m3-svelte@7.2.1</code>. The component CSS is pre-processed and injected automatically, so the only things your page must provide are the Material color tokens (<code>--m3c-*</code>) and a handful of global tokens (shapes, elevations, font).</p>
+    <p><strong>Why it exists.</strong> m3-svelte normally needs a Svelte + Vite toolchain plus a PostCSS mixins plugin. This file removes all of that: <em>no install, no config, no bundler</em>. Drop a <code>&lt;script type="module"&gt;</code> on any static page.</p>
+    <p><strong>What's inside.</strong></p>
+    <ul>
+      <li><strong>Svelte 5 runtime</strong> — exposed through <code>mount</code>, <code>unmount</code> and <code>createRawSnippet</code>.</li>
+      <li><strong>50+ components</strong> — Button, FAB, Card, Dialog, BottomSheet, ListItem, Menu, Snackbar, Checkbox, Chip, Switch, Slider, Select, TextField, DatePicker, TimePicker, progress indicators, navigation rail/bar/drawer, Tabs and more.</li>
+      <li><strong>Helpers</strong> — easing curves, shared-axis animations, shape paths, badge utilities, and the <code>Icon</code> component for Iconify-style icons.</li>
+    </ul>
+    <p><strong>Good to know.</strong> Props passed to <code>mount()</code> are read once, since there is no Svelte compiler to make them reactive. For live updates, listen to DOM events or unmount and mount again (see <a class="inline" href="#reactivity">Reactivity</a>).</p>
+  </section>
+
+  <!-- ───────── How to use ───────── -->
+  <section id="usage">
+    <h2>How to use</h2>
+    <p>Four steps. The whole thing fits in one HTML file.</p>
+
+    <div class="step"><div class="n">1</div><div>
+      <h3>Add a theme</h3>
+      <p>Components read Material color tokens from CSS variables. Paste a theme (generate one with the <a class="inline" href="https://ktibow.github.io/m3-svelte/theme" target="_blank" rel="noopener">m3-svelte theme builder</a>, or copy the baseline below) plus the global tokens.</p>
+<pre><button class="copy" data-copy>Copy</button><code><span class="k">&lt;style&gt;</span>
+  :root {
+    <span class="c">/* colors — baseline light theme, trimmed; see Docs → Theming for the full list */</span>
+    --m3c-primary: #6750A4;  --m3c-on-primary: #FFFFFF;
+    --m3c-primary-container: #EADDFF; --m3c-on-primary-container: #21005D;
+    --m3c-secondary-container: #E8DEF8; --m3c-on-secondary-container: #1D192B;
+    --m3c-surface: #FEF7FF; --m3c-on-surface: #1D1B20; --m3c-on-surface-variant: #49454F;
+    --m3c-surface-container: #F3EDF7; --m3c-surface-container-highest: #E6E0E9;
+    --m3c-outline: #79747E; --m3c-outline-variant: #CAC4D0; --m3c-shadow: #000;
+
+    <span class="c">/* globals every component expects */</span>
+    --density: 0;
+    --m3-font: "Google Sans Flex", Roboto, system-ui, sans-serif;
+    --m3-shape-extra-small: 4px; --m3-shape-small: 8px; --m3-shape-medium: 12px;
+    --m3-shape-large: 16px; --m3-shape-extra-large: 28px; --m3-shape-full: calc(infinity * 1px);
+    --m3-elevation-1: 0 1px 2px 0 rgb(0 0 0 / .3), 0 1px 3px 1px rgb(0 0 0 / .15);
+    --m3-elevation-2: 0 1px 2px 0 rgb(0 0 0 / .3), 0 2px 6px 2px rgb(0 0 0 / .15);
+    --m3-elevation-3: 0 1px 3px 0 rgb(0 0 0 / .3), 0 4px 8px 3px rgb(0 0 0 / .15);
+    --m3-easing-fast: ease 150ms; --m3-easing: ease 233ms; --m3-easing-fast-spatial: ease 383ms;
+    --m3-timing-function-emphasized-decel: cubic-bezier(.05,.7,.1,1);
+  }
+  body { background: var(--m3c-surface); color: var(--m3c-on-surface); font-family: var(--m3-font); }
+<span class="k">&lt;/style&gt;</span></code></pre>
+    </div></div>
+
+    <div class="step"><div class="n">2</div><div>
+      <h3>Import the module</h3>
+      <p>Use a module script. Load from jsDelivr (shown), or download <code>m3svelte.js</code> and import it relatively. Pin a commit hash instead of <code>@main</code> for production.</p>
+<pre><button class="copy" data-copy>Copy</button><code><span class="k">&lt;script type="module"&gt;</span>
+  <span class="k">import</span> { mount, createRawSnippet, Button, Switch }
+    <span class="k">from</span> <span class="s">"https://cdn.jsdelivr.net/gh/mightyhammerheadtree/m3svelte.js@main/m3svelte.js"</span>;
+<span class="k">&lt;/script&gt;</span></code></pre>
+    </div></div>
+
+    <div class="step"><div class="n">3</div><div>
+      <h3>Mount a component</h3>
+      <p><code>mount(Component, { target, props })</code> renders into any DOM node. Text or markup children are passed as a <em>snippet</em> made with <code>createRawSnippet</code>.</p>
+<pre><button class="copy" data-copy>Copy</button><code><span class="k">const</span> text = (html) =&gt; createRawSnippet(() =&gt; ({ render: () =&gt; <span class="s">`&lt;span&gt;${html}&lt;/span&gt;`</span> }));
+
+mount(Button, {
+  target: document.querySelector(<span class="s">"#app"</span>),
+  props: {
+    variant: <span class="s">"filled"</span>,            <span class="c">// elevated | filled | tonal | outlined | text</span>
+    onclick: () =&gt; alert(<span class="s">"Hello from m3svelte.js"</span>),
+    children: text(<span class="s">"Click me"</span>),
+  },
+});</code></pre>
+    </div></div>
+
+    <div class="step"><div class="n">4</div><div>
+      <h3>Read values back</h3>
+      <p>Form components forward native attributes to their <code>&lt;input&gt;</code>, so normal DOM events work. Components that say <em>“must be wrapped in a label”</em> (Switch, Checkbox, Radio) simply need a <code>&lt;label&gt;</code> as the mount target.</p>
+<pre><button class="copy" data-copy>Copy</button><code><span class="k">&lt;label id="dark"&gt;&lt;/label&gt;</span> Dark mode
+
+mount(Switch, {
+  target: document.querySelector(<span class="s">"#dark"</span>),
+  props: {
+    checked: matchMedia(<span class="s">"(prefers-color-scheme: dark)"</span>).matches,
+    onchange: (e) =&gt; document.documentElement.dataset.theme = e.target.checked ? <span class="s">"dark"</span> : <span class="s">"light"</span>,
+  },
+});</code></pre>
+    </div></div>
+  </section>
+
+  <!-- ───────── Documentation ───────── -->
+  <section id="docs">
+    <h2>Documentation</h2>
+    <p>Everything the module exports, grouped. Props listed are the important ones; every component also accepts the native attributes of its root element (<code>class</code>, <code>style</code>, <code>disabled</code>, <code>aria-*</code>, …). The upstream <a class="inline" href="https://ktibow.github.io/m3-svelte/" target="_blank" rel="noopener">m3-svelte site</a> has interactive demos of each.</p>
+
+    <h3 id="runtime">Runtime API</h3>
+    <table>
+      <tr><th>Export</th><th>Signature</th><th>Notes</th></tr>
+      <tr><td>mount</td><td><code>mount(Component, { target, props?, anchor? })</code></td><td>Renders a component into <code>target</code>. Returns the component instance.</td></tr>
+      <tr><td>unmount</td><td><code>unmount(instance)</code></td><td>Removes it and runs cleanup.</td></tr>
+      <tr><td>createRawSnippet</td><td><code>createRawSnippet(() =&gt; ({ render: () =&gt; "&lt;b&gt;html&lt;/b&gt;" }))</code></td><td>Builds a <code>children</code> snippet from an HTML string. The string must have a single root element.</td></tr>
+      <tr><td>snackbar</td><td><code>snackbar(message, actions?, closable?, timeout?)</code></td><td>Imperative toast. Requires one mounted <code>Snackbar</code> component on the page.</td></tr>
+    </table>
+
+    <h3 id="buttons">Buttons</h3>
+    <table>
+      <tr><th>Component</th><th>Key props</th><th>Notes</th></tr>
+      <tr><td>Button</td><td><code>variant</code> elevated | filled | tonal | outlined | text · <code>size</code> xs | s | m | l | xl · <code>square</code> · <code>iconType</code> none | left | full · <code>href</code> · <code>onclick</code> · <code>children</code></td><td>Renders <code>&lt;a&gt;</code> when <code>href</code> is set. Pass <code>label: true</code> to render a <code>&lt;label&gt;</code> (toggle buttons).</td></tr>
+      <tr><td>FAB</td><td><code>variant</code> primary | secondary | tertiary | surface · <code>size</code> small | normal | large · <code>icon</code> · <code>text</code> · <code>elevation</code> · <code>onclick</code></td><td>Extended FAB when <code>text</code> is given.</td></tr>
+      <tr><td>SplitButton</td><td><code>variant</code> · <code>size</code> · <code>onclick</code> · <code>children</code> · menu snippet</td><td>Primary action + dropdown.</td></tr>
+      <tr><td>ConnectedButtons</td><td><code>children</code></td><td>Wrapper that fuses adjacent Buttons into a segmented group.</td></tr>
+    </table>
+
+    <h3 id="containers">Containers</h3>
+    <table>
+      <tr><th>Component</th><th>Key props</th><th>Notes</th></tr>
+      <tr><td>Card</td><td><code>variant</code> elevated | filled | outlined · <code>onclick</code> · <code>href</code> · <code>children</code></td><td>Interactive when <code>onclick</code>/<code>href</code> set.</td></tr>
+      <tr><td>Dialog</td><td><code>open</code> · <code>headline</code> · <code>icon</code> · <code>closeOnClick</code> · <code>closeOnEsc</code> · <code>children</code> · <code>buttons</code> snippet</td><td>Uses the native <code>&lt;dialog&gt;</code>.</td></tr>
+      <tr><td>BottomSheet</td><td><code>close</code> callback · <code>children</code></td><td>Draggable modal sheet.</td></tr>
+      <tr><td>ListItem</td><td><code>headline</code> · <code>supporting</code> · <code>overline</code> · <code>lines</code> 1–3 · <code>leading</code>/<code>trailing</code> snippets · <code>onclick</code> · <code>href</code></td><td>Renders <code>&lt;li&gt;</code>; put it inside a <code>&lt;ul&gt;</code>.</td></tr>
+      <tr><td>Menu / MenuItem</td><td>MenuItem: <code>icon</code> · <code>disabled</code> · <code>onclick</code> · <code>children</code></td><td>Menu is the elevated container; you handle positioning.</td></tr>
+      <tr><td>Snackbar</td><td>—</td><td>Mount once near <code>&lt;/body&gt;</code>, then call <code>snackbar()</code> anywhere.</td></tr>
+      <tr><td>SnackbarItem</td><td><code>children</code></td><td>Static snackbar surface for custom layouts.</td></tr>
+    </table>
+
+    <h3 id="forms">Forms</h3>
+    <table>
+      <tr><th>Component</th><th>Key props</th><th>Notes</th></tr>
+      <tr><td>Checkbox</td><td><code>checked</code> · <code>disabled</code></td><td>Mount inside a <code>&lt;label&gt;</code>.</td></tr>
+      <tr><td>Switch</td><td><code>checked</code> · <code>disabled</code> · <code>icons</code> checked | both | none</td><td>Mount inside a <code>&lt;label&gt;</code>. Supports drag.</td></tr>
+      <tr><td>RadioAnim1 / 2 / 3</td><td><code>children</code> = a native <code>&lt;input type="radio"&gt;</code></td><td>Three animation styles.</td></tr>
+      <tr><td>Chip</td><td><code>variant</code> input | assist | general · <code>icon</code> · <code>trailingIcon</code> · <code>selected</code> · <code>elevated</code> · <code>onclick</code> · <code>children</code></td><td></td></tr>
+      <tr><td>ChipChooser</td><td><code>options</code> [{ label, icon? }] · <code>chosenOptions</code></td><td>Multi-select chip row.</td></tr>
+      <tr><td>Slider</td><td><code>value</code> · <code>min</code> · <code>max</code> · <code>step</code> · <code>ticks</code> · <code>showValue</code> · <code>format</code> · <code>size</code> · <code>disabled</code></td><td>Forwards <code>oninput</code>/<code>onchange</code>.</td></tr>
+      <tr><td>Select / SelectOutlined</td><td><code>label</code> · <code>options</code> [{ value, text }] · <code>value</code> · <code>required</code> · <code>error</code> · <code>disabled</code></td><td>Native <code>&lt;select&gt;</code> underneath.</td></tr>
+      <tr><td>TextField · TextFieldOutlined · TextFieldMultiline · TextFieldOutlinedMultiline</td><td><code>label</code> · <code>value</code> · <code>leadingIcon</code> · <code>trailing</code> { icon, onclick } · <code>error</code> · <code>required</code> · <code>disabled</code> · <code>enter</code> callback · any input attr</td><td>Filled vs outlined; single vs multi-line.</td></tr>
+      <tr><td>DateField / DateFieldOutlined</td><td><code>label</code> · <code>date</code> (YYYY-MM-DD) · <code>required</code> · <code>error</code></td><td>Opens a docked picker.</td></tr>
+      <tr><td>DatePickerDocked</td><td><code>date</code> · <code>clearable</code> · <code>close</code> · <code>setDate</code></td><td>Standalone calendar.</td></tr>
+      <tr><td>TimePickerDial</td><td><code>hour</code> · <code>minute</code> · <code>is24h</code> · <code>close</code></td><td>Analog dial picker.</td></tr>
+      <tr><td>LinearProgress · WavyLinearProgress · CircularProgress</td><td><code>percent</code> 0–100 · <code>height</code>/<code>size</code></td><td>Determinate.</td></tr>
+      <tr><td>LinearProgressEstimate · WavyLinearProgressEstimate · CircularProgressEstimate</td><td><code>sToLoad</code></td><td>Indeterminate that eases toward 100%.</td></tr>
+      <tr><td>LoadingIndicator</td><td><code>contained</code></td><td>M3 Expressive morphing loader.</td></tr>
+    </table>
+
+    <h3 id="nav">Navigation</h3>
+    <table>
+      <tr><th>Component</th><th>Key props</th><th>Notes</th></tr>
+      <tr><td>NavCMLX / NavCMLXItem</td><td>Item: <code>icon</code> · <code>text</code> · <code>selected</code> · <code>href</code> / <code>onclick</code> — Container: <code>variant</code> auto | bar | rail | drawer</td><td>Adaptive nav: bar on compact, rail on medium, drawer on large/extra-large.</td></tr>
+      <tr><td>NavigationRail / NavigationRailItem</td><td>Same item props</td><td>Classic rail.</td></tr>
+      <tr><td>Tabs / VariableTabs</td><td><code>items</code> [{ name, value, icon? }] · <code>tab</code> · <code>secondary</code></td><td>Fixed-width vs content-width tabs.</td></tr>
+      <tr><td>TabsLink / VariableTabsLink</td><td><code>items</code> [{ name, href, icon? }]</td><td>Anchor-based tabs for routing.</td></tr>
+    </table>
+
+    <h3 id="misc">Misc</h3>
+    <table>
+      <tr><th>Export</th><th>Key props / members</th><th>Notes</th></tr>
+      <tr><td>Icon</td><td><code>icon</code> { body, width, height } · <code>size</code></td><td>Renders any Iconify icon object inline as SVG.</td></tr>
+      <tr><td>Divider</td><td><code>inset</code> · <code>insetLeft</code> · <code>insetRight</code></td><td></td></tr>
+      <tr><td>easing</td><td><code>easeEmphasized</code>, <code>easeEmphasizedAccel</code>, <code>easeEmphasizedDecel</code>, <code>easeStandard</code>…</td><td>Functions usable with any JS animation.</td></tr>
+      <tr><td>animation</td><td><code>sharedAxisTransition</code> and friends</td><td>Svelte transition helpers.</td></tr>
+      <tr><td>shapes</td><td>M3 Expressive shape path data</td><td>Static and animatable variants.</td></tr>
+      <tr><td>badge</td><td>Badge helpers</td><td>Dot and numbered badges for nav items.</td></tr>
+    </table>
+
+    <h3 id="icons">Icons</h3>
+    <p>Any prop named <code>icon</code> takes an <em>Iconify icon object</em>. Import one from <code>@ktibow/iconset-material-symbols</code> via a CDN, or write it inline:</p>
+<pre><button class="copy" data-copy>Copy</button><code><span class="k">import</span> iconAdd <span class="k">from</span> <span class="s">"https://esm.sh/@ktibow/iconset-material-symbols/add"</span>;
+<span class="c">// …or inline:</span>
+<span class="k">const</span> iconAdd = { width: 24, height: 24, body: <span class="s">'&lt;path fill="currentColor" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/&gt;'</span> };
+
+mount(FAB, { target: el, props: { icon: iconAdd, text: <span class="s">"Create"</span>, onclick: create } });</code></pre>
+
+    <h3 id="theming">Theming</h3>
+    <p>Colors are plain CSS variables named <code>--m3c-&lt;role&gt;</code> (c for <em>color</em>). Override them on <code>:root</code>, inside a media query, or on any subtree. This page swaps the whole set with <code>&lt;html data-theme="dark"&gt;</code>. Roles used by the components:</p>
+    <div class="swatches" id="swatches"></div>
+    <p>Other knobs you can set globally:</p>
+    <table>
+      <tr><th>Variable</th><th>Purpose</th></tr>
+      <tr><td>--density</td><td>Integer from −3 to 0. Each step removes 4px of height from buttons, fields and list items.</td></tr>
+      <tr><td>--m3-font</td><td>Typeface for every component. Google Sans Flex is the M3 default; Roboto/system-ui work fine.</td></tr>
+      <tr><td>--m3-shape-*</td><td>Corner radii: none, extra-small, small, medium, large, large-increased, extra-large, full.</td></tr>
+      <tr><td>--m3-elevation-0…5</td><td>Box-shadow stacks used by cards, FABs, menus and dialogs.</td></tr>
+      <tr><td>--m3-easing*, --m3-timing-function*</td><td>Motion tokens for transitions.</td></tr>
+      <tr><td>--m3v-background</td><td>Tell outlined fields what color sits behind them so the label notch matches.</td></tr>
+      <tr><td>--m3v-bottom-offset</td><td>Shift snackbars up (e.g. above a bottom nav bar).</td></tr>
+      <tr><td>--m3-button-shape, --m3-card-shape, --m3-dialog-shape, …</td><td>Per-component shape overrides, each defaulting to a global shape token.</td></tr>
+    </table>
+
+    <h3 id="reactivity">Reactivity</h3>
+    <p>Svelte reactivity comes from the compiler, which isn't in the browser. So with <code>mount()</code> props are a snapshot. Two simple patterns cover almost everything:</p>
+<pre><button class="copy" data-copy>Copy</button><code><span class="c">// 1. Read state through DOM events (works for every form component)</span>
+mount(Slider, { target: el, props: { value: 30, oninput: (e) =&gt; (label.textContent = e.target.value) } });
+
+<span class="c">// 2. Replace the component when inputs change</span>
+<span class="k">let</span> bar = mount(LinearProgress, { target: box, props: { percent: 0 } });
+<span class="k">function</span> setProgress(p) {
+  unmount(bar);
+  bar = mount(LinearProgress, { target: box, props: { percent: p } });
+}</code></pre>
+
+    <h3 id="snackbar">Snackbar example</h3>
+<pre><button class="copy" data-copy>Copy</button><code>mount(Snackbar, { target: document.body });              <span class="c">// once</span>
+snackbar(<span class="s">"Saved"</span>, { Undo: () =&gt; restore() }, <span class="k">true</span>, 4000);  <span class="c">// anywhere, any time</span></code></pre>
+
+    <h3 id="faq">Notes &amp; troubleshooting</h3>
+    <ul>
+      <li><strong>Nothing renders / blank.</strong> Make sure the script tag has <code>type="module"</code> and the page is served over HTTP(S). Check the console — a missing <code>--m3c-*</code> token shows up as transparent or black components rather than an error.</li>
+      <li><strong>Components look squashed.</strong> <code>--density</code> is undefined. Set <code>--density: 0</code>.</li>
+      <li><strong>Button has no text.</strong> <code>children</code> must be a snippet (from <code>createRawSnippet</code>), not a string.</li>
+      <li><strong>Browser support.</strong> The bundled CSS uses relative color syntax (<code>oklch(from …)</code>) and <code>calc(infinity*1px)</code>: Chrome 119+, Safari 16.4+, Firefox 128+.</li>
+      <li><strong>Size.</strong> ~1.2 MB unminified, ~250 KB gzipped from jsDelivr. Everything is one module, so there's one request and it caches.</li>
+      <li><strong>Versioning.</strong> Tracks <code>m3-svelte@7.2.1</code>. Pin a commit (<code>@&lt;sha&gt;</code>) for reproducible builds.</li>
+      <li><strong>License.</strong> m3-svelte is MIT; this bundle redistributes it unchanged.</li>
+    </ul>
+  </section>
+
+  <footer>
+    m3svelte.js · a repackaging of <a class="inline" href="https://github.com/KTibow/m3-svelte" target="_blank" rel="noopener">KTibow/m3-svelte</a> ·
+    <a class="inline" href="https://github.com/mightyhammerheadtree/m3svelte.js" target="_blank" rel="noopener">source on GitHub</a>
+  </footer>
+</main>
+
+<script>
+  // Copy buttons for code blocks
+  document.querySelectorAll('[data-copy]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const code = btn.parentElement.querySelector('code').innerText;
+      try { await navigator.clipboard.writeText(code); btn.textContent = 'Copied'; }
+      catch { btn.textContent = 'Failed'; }
+      setTimeout(() => (btn.textContent = 'Copy'), 1200);
+    });
+  });
+
+  // Color role swatches for the theming section
+  const roles = ['primary','on-primary','primary-container','on-primary-container','secondary','on-secondary','secondary-container','on-secondary-container','tertiary','on-tertiary','tertiary-container','on-tertiary-container','error','on-error','error-container','on-error-container','surface','on-surface','surface-variant','on-surface-variant','surface-container-lowest','surface-container-low','surface-container','surface-container-high','surface-container-highest','outline','outline-variant','inverse-surface','inverse-on-surface','inverse-primary','shadow','scrim'];
+  const pair = r => r.startsWith('on-') ? r.slice(3) : ('on-' + r);
+  document.getElementById('swatches').innerHTML = roles.map(r => {
+    const fg = roles.includes(pair(r)) ? `var(--m3c-${pair(r)})` : (r === 'shadow' || r === 'scrim' ? '#fff' : 'var(--m3c-on-surface)');
+    return `<div class="sw" style="background:var(--m3c-${r});color:${fg};border:1px solid var(--m3c-outline-variant)">--m3c-${r}</div>`;
+  }).join('');
+
+  // Initial theme from system preference
+  const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.dataset.theme = prefersDark ? 'dark' : 'light';
+</script>
+
+<script type="module">
+  // ── The page eats its own dog food: everything below is mounted from m3svelte.js ──
+  const CDN = 'https://cdn.jsdelivr.net/gh/mightyhammerheadtree/m3svelte.js@main/m3svelte.js';
+  const status = document.getElementById('demo-status');
+  const demo = document.getElementById('demo');
+
+  try {
+    const M3 = await import(CDN);
+    const { Button, Switch, Checkbox, LinearProgress } = M3;
+    const mount = M3.mount;
+    if (typeof mount !== 'function') throw new Error('The bundle does not export mount()');
+
+    // children snippet: prefer createRawSnippet, fall back to a minimal manual snippet
+    const text = M3.createRawSnippet
+      ? (s) => M3.createRawSnippet(() => ({ render: () => `<span>${s}</span>` }))
+      : (s) => (anchor) => anchor.before(document.createTextNode(s));
+
+    status.remove();
+
+    // Buttons
+    let clicks = 0;
+    const counter = document.createElement('span');
+    counter.className = 'status';
+    for (const variant of ['filled', 'tonal', 'outlined', 'text']) {
+      const slot = document.createElement('span');
+      demo.appendChild(slot);
+      mount(Button, {
+        target: slot,
+        props: { variant, onclick: () => (counter.textContent = `clicked ×${++clicks}`), children: text(variant[0].toUpperCase() + variant.slice(1)) },
+      });
+    }
+    demo.appendChild(counter);
+
+    // Checkbox
+    const cb = document.createElement('label');
+    const cbSlot = document.createElement('span');
+    cb.append(cbSlot, document.createTextNode('Checkbox'));
+    demo.appendChild(cb);
+    mount(Checkbox, { target: cbSlot, props: { checked: true } });
+
+    // Switch (local demo copy)
+    const sw = document.createElement('label');
+    const swSlot = document.createElement('span');
+    sw.append(swSlot, document.createTextNode('Switch'));
+    demo.appendChild(sw);
+    mount(Switch, { target: swSlot, props: { checked: false } });
+
+    // Progress bar
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    demo.appendChild(bar);
+    mount(LinearProgress, { target: bar, props: { percent: 65 } });
+
+    // Header theme switch — the real one controlling the page
+    mount(Switch, {
+      target: document.getElementById('theme-switch'),
+      props: {
+        checked: document.documentElement.dataset.theme === 'dark',
+        icons: 'both',
+        'aria-label': 'Dark mode',
+        onchange: (e) => (document.documentElement.dataset.theme = e.target.checked ? 'dark' : 'light'),
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    status.className = 'status err';
+    status.textContent = `Could not load m3svelte.js (${err.message}). The docs below still apply.`;
+    // Plain fallback for the header toggle
+    const t = document.getElementById('theme-switch');
+    t.textContent = '◐';
+    t.style.cursor = 'pointer';
+    t.onclick = () => (document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+  }
+</script>
+</body>
+</html>
